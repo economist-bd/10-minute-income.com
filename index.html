@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Minute Income - Manjurul Haque</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Hind Siliguri', 'sans-serif'] },
+                    colors: { neonBlue: '#00f3ff', neonPurple: '#bc13fe', darkBg: '#050505', glass: 'rgba(20, 20, 30, 0.8)' },
+                    boxShadow: { 'neon': '0 0 10px #00f3ff, 0 0 20px #00f3ff' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #050505; color: #e2e8f0; }
+        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .gradient-text { background: linear-gradient(to right, #00f3ff, #bc13fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        .chapter-text { line-height: 1.8; font-size: 1.1rem; color: #cbd5e1; }
+    </style>
+</head>
+<body class="font-sans antialiased overflow-x-hidden">
+
+    <nav class="fixed w-full z-50 glass-panel border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0 cursor-pointer" onclick="location.reload()">
+                    <span class="text-2xl font-bold gradient-text"><i class="fas fa-bolt mr-2"></i>10 MINUTE</span>
+                </div>
+                
+                <div class="hidden md:block">
+                    <div class="ml-10 flex space-x-4">
+                        <button onclick="showSection('homeSection')" class="hover:text-neonBlue px-3 py-2">হোম</button>
+                        <button id="navDashboard" onclick="showSection('dashboardSection')" class="hidden hover:text-neonBlue px-3 py-2">কোর্স (বই পড়ুন)</button>
+                        <button id="navAdmin" onclick="showSection('adminSection')" class="hidden bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">অ্যাডমিন</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <div id="authButtons">
+                        <button onclick="openModal('loginModal')" class="text-gray-300 hover:text-white px-3 py-2">লগিন</button>
+                        <button onclick="openModal('signupModal')" class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-full shadow-neon">সাইন আপ</button>
+                    </div>
+                    <div id="userProfile" class="hidden flex items-center space-x-3">
+                        <span id="userNameDisplay" class="text-neonBlue font-bold hidden sm:block">User</span>
+                        <button onclick="handleLogout()" class="text-gray-400 hover:text-red-500"><i class="fas fa-sign-out-alt fa-lg"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="loader" class="fixed inset-0 z-[100] bg-black flex items-center justify-center hidden">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-neonBlue"></div>
+    </div>
+
+    <section id="homeSection" class="pt-24 pb-12 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col-reverse lg:flex-row items-center">
+            <div class="w-full lg:w-1/2 mt-8 lg:mt-0 text-center lg:text-left">
+                <div class="inline-block px-3 py-1 mb-4 text-xs font-semibold text-cyan-400 bg-cyan-900 bg-opacity-30 rounded-full border border-cyan-500">বেস্টসেলার ই-বুক কোর্স</div>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4">
+                    <span class="block text-white" id="displayHeroTitle">প্রতিদিন ১০ মিনিট!</span>
+                    <span class="block gradient-text">অনলাইন থেকে সহজ আয়</span>
+                </h1>
+                <p class="text-gray-400 mb-8 text-lg">লেখক মঞ্জুরুল হক-এর পূর্ণাঙ্গ গাইডলাইন। ১০টি অধ্যায় পড়ে শিখুন মাইক্রো-টাস্কিং, ফটোগ্রাফি এবং প্যাসিভ ইনকাম।</p>
+                <button onclick="checkAuthAndGo()" class="px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg hover:shadow-neon transition transform hover:scale-105">
+                    পড়া শুরু করুন
+                </button>
+            </div>
+            <div class="w-full lg:w-1/2 flex justify-center">
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-neonBlue blur-2xl opacity-20 rounded-full"></div>
+                    <img id="displayHeroImage" src="https://via.placeholder.com/400x600?text=Book+Cover" class="relative rounded-lg shadow-2xl border-2 border-gray-700 w-64 md:w-80 transform group-hover:rotate-2 transition duration-500">
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 mt-16">
+            <div class="w-full h-32 glass-panel rounded-lg flex items-center justify-center overflow-hidden border border-gray-700">
+                <img id="displayAdBanner" src="https://via.placeholder.com/1200x200?text=Advertisement+Space" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition">
+            </div>
+        </div>
+    </section>
+
+    <section id="dashboardSection" class="pt-24 pb-12 hidden min-h-screen">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="glass-panel p-6 rounded-lg mb-8 flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">কোর্স কন্টেন্ট (ই-বুক)</h2>
+                    <p class="text-gray-400 text-sm">বইটি সম্পূর্ণ পড়ে সার্টিফিকেট সংগ্রহ করুন</p>
+                </div>
+                <div class="mt-4 md:mt-0 w-full md:w-1/3">
+                    <div class="flex justify-between text-xs text-neonBlue mb-1">
+                        <span>Progress</span>
+                        <span id="progressText">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-3">
+                        <div id="overallProgress" class="bg-gradient-to-r from-cyan-500 to-blue-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="chapterListContainer" class="space-y-4">
+                </div>
+
+            <div id="certDownloadArea" class="mt-10 text-center hidden animate-bounce">
+                <h3 class="text-2xl text-neonPurple font-bold mb-4">অভিনন্দন! আপনি বইটি শেষ করেছেন।</h3>
+                <button onclick="downloadCert()" class="px-8 py-3 bg-neonBlue text-black font-bold rounded-lg shadow-neon hover:bg-white transition">
+                    <i class="fas fa-file-pdf mr-2"></i> সার্টিফিকেট ডাউনলোড করুন
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="adminSection" class="pt-24 pb-12 hidden min-h-screen bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-red-500 mb-8 border-b border-gray-700 pb-4">অ্যাডমিন প্যানেল</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-panel p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-upload mr-2"></i>ইমেজ ও টাইটেল আপডেট</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-400 text-sm mb-1">বইয়ের কভার ইমেজ</label>
+                        <div class="flex gap-2">
+                            <input type="file" id="adminHeroImgInput" class="block w-full text-sm text-gray-400 file:bg-gray-700 file:text-white file:border-0 file:py-2 file:px-4 file:rounded">
+                            <button onclick="uploadAsset('hero')" class="bg-green-600 text-white px-3 rounded text-sm hover:bg-green-700">Upload</button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-400 text-sm mb-1">বিজ্ঞাপন ব্যানার</label>
+                        <div class="flex gap-2">
+                            <input type="file" id="adminAdInput" class="block w-full text-sm text-gray-400 file:bg-gray-700 file:text-white file:border-0 file:py-2 file:px-4 file:rounded">
+                            <button onclick="uploadAsset('ad')" class="bg-green-600 text-white px-3 rounded text-sm hover:bg-green-700">Upload</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-400 text-sm mb-1">ওয়েবসাইট টাইটেল</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="adminTitleInput" placeholder="New Title" class="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600">
+                            <button onclick="updateTitle()" class="bg-blue-600 text-white px-3 rounded text-sm hover:bg-blue-700">Update</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-white mb-4"><i class="fas fa-users mr-2"></i>ইউজার লিস্ট</h3>
+                    <div class="overflow-y-auto h-64 border border-gray-700 rounded">
+                        <table class="w-full text-sm text-left text-gray-400">
+                            <thead class="bg-gray-800 text-xs uppercase sticky top-0">
+                                <tr>
+                                    <th class="px-4 py-2">Email</th>
+                                    <th class="px-4 py-2">Role</th>
+                                    <th class="px-4 py-2">Progress</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUserTable">
+                                </tbody>
+                        </table>
+                    </div>
+                    <button onclick="loadAdminData()" class="mt-2 text-xs text-neonBlue hover:underline">Refresh List</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="readerModal" class="fixed inset-0 z-[80] hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20">
+            <div class="fixed inset-0 bg-black bg-opacity-95 transition-opacity" onclick="closeReader()"></div>
+            <div class="relative glass-panel border border-neonPurple rounded-lg max-w-3xl w-full p-6 sm:p-10 transform transition-all">
+                
+                <div class="flex justify-between items-start mb-6 border-b border-gray-700 pb-4">
+                    <h3 id="readerTitle" class="text-2xl font-bold text-neonBlue">Chapter Title</h3>
+                    <button onclick="closeReader()" class="text-gray-400 hover:text-red-500 text-3xl">&times;</button>
+                </div>
+                
+                <div id="readerContent" class="chapter-content text-justify mb-8 h-96 overflow-y-auto pr-2 custom-scrollbar chapter-text">
+                    </div>
+
+                <div class="flex justify-end pt-4 border-t border-gray-700">
+                    <button onclick="completeCurrentChapter()" class="px-6 py-3 bg-green-600 text-white rounded font-bold hover:bg-green-700 shadow-neon flex items-center">
+                        <i class="fas fa-check mr-2"></i> পড়া শেষ (Mark as Done)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="fixed inset-0 z-[90] hidden">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-black bg-opacity-80" onclick="closeModal('loginModal')"></div>
+            <div class="relative glass-panel p-8 rounded-lg max-w-sm w-full border border-gray-700">
+                <h2 class="text-2xl font-bold text-white mb-6 text-center">লগিন</h2>
+                <input type="email" id="loginEmail" placeholder="Email" class="w-full bg-gray-800 text-white p-3 rounded mb-3 border border-gray-600 focus:border-neonBlue outline-none">
+                <input type="password" id="loginPass" placeholder="Password" class="w-full bg-gray-800 text-white p-3 rounded mb-6 border border-gray-600 focus:border-neonBlue outline-none">
+                <button onclick="loginUser()" class="w-full bg-neonBlue text-black font-bold py-3 rounded hover:bg-cyan-400 transition">প্রবেশ করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="signupModal" class="fixed inset-0 z-[90] hidden">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-black bg-opacity-80" onclick="closeModal('signupModal')"></div>
+            <div class="relative glass-panel p-8 rounded-lg max-w-sm w-full border border-gray-700">
+                <h2 class="text-2xl font-bold text-white mb-6 text-center">নতুন অ্যাকাউন্ট</h2>
+                <input type="text" id="signupName" placeholder="Full Name" class="w-full bg-gray-800 text-white p-3 rounded mb-3 border border-gray-600">
+                <input type="email" id="signupEmail" placeholder="Email" class="w-full bg-gray-800 text-white p-3 rounded mb-3 border border-gray-600">
+                <input type="password" id="signupPass" placeholder="Password" class="w-full bg-gray-800 text-white p-3 rounded mb-6 border border-gray-600">
+                <button onclick="registerUser()" class="w-full bg-neonPurple text-white font-bold py-3 rounded hover:bg-purple-600 transition">সাইন আপ</button>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:none;">
+        <div id="certificateTemplate" style="width:800px; height:600px; padding:40px; text-align:center; background:#fff; color:#000; border:10px solid #1f2937; position:relative;">
+            <div style="border:4px double #00f3ff; height:100%; padding:30px; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                <h1 style="font-size:48px; color:#bc13fe; margin:0; font-family: serif;">CERTIFICATE OF COMPLETION</h1>
+                <p style="font-size:18px; margin-top:20px;">This certificate is proudly presented to</p>
+                <h2 id="certName" style="font-size:40px; font-weight:bold; border-bottom:2px solid #000; margin:20px 0; padding:0 30px;">User Name</h2>
+                <p style="font-size:18px;">For successfully completing the course/book</p>
+                <h3 style="font-size:32px; color:#007bff; margin:15px 0;">"প্রতিদিন ১০ মিনিট! (অনলাইন আয়)"</h3>
+                <div style="width:100%; margin-top:50px; display:flex; justify-content:space-between; padding:0 50px;">
+                    <div style="text-align:center;">
+                        <p style="border-top:1px solid #000; padding-top:5px; width:200px;"><b>Manjurul Haque</b><br>Author & Admin</p>
+                    </div>
+                    <div style="text-align:center;">
+                        <p style="border-top:1px solid #000; padding-top:5px; width:200px;"><span id="certDate">Date</span><br>Issue Date</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js";
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCWW8qlaqmJ5HBDYL7p5FGrV5hT7kVWo-w",
+            authDomain: "minute-income.firebaseapp.com",
+            projectId: "minute-income",
+            storageBucket: "minute-income.firebasestorage.app",
+            messagingSenderId: "401216110424",
+            appId: "1:401216110424:web:9dd0fa943371797b1daf2d"
+        };
+
+        // Initialize
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // --- BOOK DATA (10 Chapters + Summary) ---
+        // This is the full content you created earlier
+        const bookChapters = [
+            { id: 1, title: "ভূমিকা: ১০ মিনিটের জাদুকরী শক্তি", content: "সময়ের অভাব—এই অজুহাত আমাদের সবার। আমরা বলি আমাদের হাতে সময় নেই, অথচ প্রতিদিন জ্যামে বসে, চায়ের আড্ডায়, কিংবা রাতে ঘুমানোর আগে ফেসবুকে স্ক্রল করে আমরা ঘণ্টার পর ঘণ্টা সময় নষ্ট করি। আমরা কি জানি, প্রতিদিন মাত্র ১০ মিনিট সময় অপচয় না করে সঠিক জায়গায় বিনিয়োগ করলে মাস শেষে তা একটি সম্মানজনক আয়ের উৎস হতে পারে?<br><br>এই বই কোনো 'রাতারাতি বড়লোক' হওয়ার ফানুস নয়। এটি একটি গাইডলাইন, কীভাবে একজন ব্যস্ত মানুষ (ছাত্র, চাকরিজীবী বা গৃহিণী) তার স্মার্টফোনটি ব্যবহার করে প্রতিদিনের ১০ মিনিট সময়কে কাজে লাগিয়ে অনলাইনে নিজের অবস্থান তৈরি করতে পারেন। আপনার পকেটের স্মার্টফোনটি কেবল বিনোদনের যন্ত্র নয়, এটি একটি আয়ের মাধ্যম। চলুন, সেই যাত্রাই শুরু করা যাক।" },
+            { id: 2, title: "অধ্যায় ১: মানসিক প্রস্তুতি ও সতর্কতা", content: "অনলাইনে আয়ের জগতে পা বাড়ানোর আগে আপনাকে মানসিকভাবে প্রস্তুত হতে হবে। কারণ, এই জগতটি যেমন সম্ভাবনাময়, তেমনি ফাঁদে ভরা।<br><br><b>১. লোভ সংবরণ:</b> মনে রাখবেন, টাকা গাছে ধরে না। অনলাইনে যেখানেই দেখবেন—'২ হাজার টাকা বিনিয়োগ করলেই প্রতিদিন ৫০০ টাকা আয়'—সেখান থেকে ১০ হাত দূরে থাকুন। এগুলো স্ক্যাম।<br><br><b>২. ধৈর্য:</b> প্রথম দিনেই হাজার টাকা আসবে না। ১০ মিনিটের অভ্যেসটি গড়ে তোলাই আসল চ্যালেঞ্জ।<br><br><b>৩. প্রয়োজনীয় সরঞ্জাম:</b> আপনার খুব দামী ল্যাপটপ বা ডিএসএলআর ক্যামেরার প্রয়োজন নেই। একটি সাধারণ স্মার্টফোন এবং ইন্টারনেট সংযোগই যথেষ্ট।" },
+            { id: 3, title: "অধ্যায় ২: মাইক্রো-টাস্কিং", content: "যাদের গ্রাফিক ডিজাইন, ভিডিও এডিটিং বা কোডিংয়ের মতো ভারী কোনো দক্ষতা নেই, এই অধ্যায়টি তাদের জন্য।<br><br><b>মাইক্রো-টাস্কিং কী?</b> বড় কোম্পানিগুলো তাদের কাজকে ছোট ছোট টুকরোয় ভাগ করে দেয়। যেমন: ইউটিউব ভিডিও দেখা, অ্যাপ ডাউনলোড করা। প্রতিটি কাজের জন্য ৩ সেন্ট থেকে ১ ডলার পর্যন্ত পাওয়া যায়।<br><br><b>কোথায় কাজ পাবেন?</b><br>১. SproutGigs (সাবেক Picoworkers)<br>২. Microworkers<br><br><b>১০ মিনিটের রুটিন:</b> সাইটে লগ-ইন করে সহজ কাজ খুঁজুন, নির্দেশাবলী মেনে কাজ করুন এবং প্রমাণ জমা দিন। ভিপিএন ব্যবহার করবেন না।" },
+            { id: 4, title: "অধ্যায় ৩: স্মার্টফোন ফটোগ্রাফি", content: "আপনার মোবাইলের গ্যালারিতে জমে থাকা প্রকৃতি বা খাবারের ছবিগুলোই হতে পারে ডলার আয়ের উৎস।<br><br><b>স্টক ফটোগ্রাফি:</b> এটি এমন এক মার্কেটপ্লেস যেখানে আপনি ছবি আপলোড করবেন এবং ক্রেতারা তা কিনে নেবেন। একটি ছবি হাজারবার বিক্রি হতে পারে।<br><br><b>কীভাবে করবেন?</b><br>১. ঘরের বা আশেপাশের সাধারণ বিষয় (কফি মগ, খোলা বই, বৃষ্টি) ছবি তুলুন।<br>2. হালকা এডিট করুন (অতিরিক্ত ফিল্টার দেবেন না)।<br>৩. Shutterstock বা Adobe Stock অ্যাপে আপলোড করুন এবং সঠিক ট্যাগ দিন।" },
+            { id: 5, title: "অধ্যায় ৪: এফিলিয়েট মার্কেটিং", content: "আপনার কোনো পণ্য বা গোডাউন নেই, তবুও আপনি ব্যবসায়ী। আপনি কোনো ই-কমার্স কোম্পানির (যেমন: Daraz, Amazon) পণ্যের লিংক শেয়ার করবেন। কেউ সেই লিংকে ক্লিক করে পণ্য কিনলে আপনি কমিশন পাবেন।<br><br><b>১০ মিনিটের রুটিন:</b><br>১. ট্রেন্ডিং পণ্য বাছুন (শীতে হুডি, গরমে ফ্যান)।<br>২. পণ্যটি নিয়ে একটি সুন্দর ও ছোট রিভিউ লিখুন।<br>৩. আপনার সোশ্যাল মিডিয়া বা পরিচিত গ্রুপে লিংকসহ শেয়ার করুন। (স্প্যামিং করবেন না)।" },
+            { id: 6, title: "অধ্যায় ৫: কন্টেন্ট ক্রিয়েশন (শর্টস/রিলস)", content: "মানুষের মনোযোগ এখন কম। তাই ৬০ সেকেন্ডের ভিডিওই এখন রাজত্ব করছে। চেহারা না দেখিয়েও ভিডিও করা যায়। বিষয় হতে পারে: অজানা তথ্য, রান্নার টিপস বা আনবক্সিং।<br><br><b>১০ মিনিটের রুটিন:</b><br>১. স্ক্রিপ্ট ভাবুন (প্রথম ৩ সেকেন্ডে হুক রাখুন)।<br>২. জানালার পাশে দাঁড়িয়ে প্রাকৃতিক আলোতে শুট করুন।<br>৩. CapCut দিয়ে এডিট করে ট্রেন্ডিং মিউজিক সহ আপলোড দিন।" },
+            { id: 7, title: "অধ্যায় ৬: প্যাসিভ ইনকাম", content: "“ঘুমানোর সময় যদি আপনার আয় না হয়, তবে মৃত্যুর আগ পর্যন্ত আপনাকে কাজ করে যেতে হবে।”<br><br><b>প্যাসিভ ইনকাম কী?</b> এটি আম গাছ লাগানোর মতো। শুরুতে কষ্ট, পরে আজীবন ফল।<br><b>৩টি সেরা উপায়:</b><br>১. ডিজিটাল প্রোডাক্ট (পিডিএফ নোট বা ই-বুক)।<br>২. স্টক ফটোগ্রাফি।<br>৩. প্রিন্ট অন ডিমান্ড (টি-শার্ট ডিজাইন)।" },
+            { id: 8, title: "অধ্যায় ৭: স্কিল ডেভেলপমেন্ট", content: "প্রতিদিন ১০ মিনিটের স্কিল ডেভেলপমেন্ট রুটিন।<br><br><b>কী শিখবেন?</b><br>১. ইংরেজি (Duolingo)<br>২. Canva ডিজাইন<br>৩. গুগল সার্চিং ও AI<br><br><b>সাপ্তাহিক রুটিন:</b> শনি-সোম ইংরেজি, মঙ্গল-বুধ টেকনিক্যাল স্কিল, বৃহস্পতি টাইপিং, শুক্র রিভিশন। দিন যতই খারাপ যাক, অন্তত ১ মিনিট হলেও শিখুন।" },
+            { id: 9, title: "অধ্যায় ৮: পেমেন্ট মেথড", content: "অর্জিত টাকা হাতে পাওয়ার উপায়।<br><br><b>১. বড় আয়ের জন্য:</b> Payoneer বা Wise ব্যবহার করুন। বিকাশেও পেওনিয়ার থেকে টাকা আনা যায়।<br><b>২. ছোট আয়ের জন্য:</b> AirTM ব্যবহার করে টাকা বিকাশে আনুন। অথবা Binance (Crypto) ব্যবহার করতে পারেন।<br><b>৩. সাবধানতা:</b> অচেনা কাউকে ফেসবুকে ডলার দেবেন না।" },
+            { id: 10, title: "অধ্যায় ৯: উপসংহার ও চ্যালেঞ্জ", content: "<b>৩০ দিনের চ্যালেঞ্জ:</b><br>১ম সপ্তাহ: প্রস্তুতি ও শেখা।<br>২য় সপ্তাহ: প্রতিদিন ১০ মিনিট কাজ করা।<br>৩য় সপ্তাহ: ভুল শুধরে নেওয়া।<br>৪র্থ সপ্তাহ: অভ্যাস গঠন।<br><br>আজ আপনি যে ১০ মিনিট সময় বিনিয়োগ করবেন, ৫ বছর পর এই সময়টুকুই আপনাকে আর্থিক স্বাধীনতা এনে দেবে। শুরু করুন এখনই।" },
+            { id: 11, title: "অধ্যায় ১০: টুলস ও বোনাস", content: "<b>প্রয়োজনীয় টুলস:</b><br>1. Design: Canva, Remove.bg<br>2. Video: CapCut, Open Camera<br>3. Payment: Payoneer, AirTM<br><br><b>FAQ:</b><br>- ল্যাপটপ লাগবে? না, মোবাইলই যথেষ্ট।<br>- বয়স? দক্ষতা থাকলে বয়স বাধা নয়।<br>- ইংরেজি? বেসিক জানলেই হবে।" }
+        ];
+
+        let currentUser = null;
+        let activeChapterId = null;
+
+        // --- AUTH FUNCTIONS ---
+        window.registerUser = async () => {
+            const email = document.getElementById('signupEmail').value;
+            const pass = document.getElementById('signupPass').value;
+            const name = document.getElementById('signupName').value;
+            
+            if(!email || !pass || !name) return alert("সব ঘর পূরণ করুন");
+
+            toggleLoader(true);
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                await setDoc(doc(db, "users", cred.user.uid), {
+                    name: name,
+                    email: email,
+                    role: 'user',
+                    completedChapters: []
+                });
+                alert("অ্যাকাউন্ট তৈরি সফল!");
+                closeModal('signupModal');
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+            toggleLoader(false);
+        };
+
+        window.loginUser = async () => {
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPass').value;
+            
+            toggleLoader(true);
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                closeModal('loginModal');
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+            toggleLoader(false);
+        };
+
+        window.handleLogout = () => {
+            signOut(auth).then(() => location.reload());
+        };
+
+        // --- AUTH STATE OBSERVER ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('authButtons').classList.add('hidden');
+                document.getElementById('userProfile').classList.remove('hidden');
+                document.getElementById('navDashboard').classList.remove('hidden');
+
+                // Get User Data
+                const userRef = doc(db, "users", user.uid);
+                const snap = await getDoc(userRef);
+                
+                if(snap.exists()){
+                    const data = snap.data();
+                    document.getElementById('userNameDisplay').innerText = data.name;
+                    
+                    // IF ADMIN
+                    if(data.role === 'admin' || data.email === 'eco452@gmail.com') {
+                        document.getElementById('navAdmin').classList.remove('hidden');
+                        loadAdminData();
+                    }
+                    
+                    // Load Chapters with Progress
+                    renderChapters(data.completedChapters || []);
+                }
+            } else {
+                document.getElementById('authButtons').classList.remove('hidden');
+                document.getElementById('userProfile').classList.add('hidden');
+            }
+            loadSiteAssets(); // Load images regardless of auth
+        });
+
+        // --- DASHBOARD: RENDER CHAPTERS ---
+        function renderChapters(completedList) {
+            const container = document.getElementById('chapterListContainer');
+            container.innerHTML = '';
+
+            let completedCount = completedList.length;
+            let total = bookChapters.length;
+            let percent = Math.round((completedCount / total) * 100);
+
+            document.getElementById('overallProgress').style.width = percent + "%";
+            document.getElementById('progressText').innerText = percent + "%";
+
+            if (percent === 100) {
+                document.getElementById('certDownloadArea').classList.remove('hidden');
+            }
+
+            bookChapters.forEach(chap => {
+                const isCompleted = completedList.includes(chap.id);
+                container.innerHTML += `
+                    <div class="glass-panel p-4 rounded-lg flex justify-between items-center border-l-4 ${isCompleted ? 'border-green-500' : 'border-gray-600'} hover:bg-gray-800 transition">
+                        <div>
+                            <h3 class="text-white font-semibold">${chap.title}</h3>
+                            <span class="text-xs ${isCompleted ? 'text-green-400' : 'text-gray-500'}">
+                                ${isCompleted ? '<i class="fas fa-check-circle"></i> সম্পন্ন হয়েছে' : 'পড়া বাকি'}
+                            </span>
+                        </div>
+                        <button onclick="openReader(${chap.id})" class="px-4 py-2 rounded bg-gray-700 hover:bg-neonBlue hover:text-black text-white text-sm transition">
+                            ${isCompleted ? 'রিভিশন দিন' : 'পড়ুন'}
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        window.openReader = (id) => {
+            activeChapterId = id;
+            const chapter = bookChapters.find(c => c.id === id);
+            document.getElementById('readerTitle').innerText = chapter.title;
+            document.getElementById('readerContent').innerHTML = chapter.content;
+            document.getElementById('readerModal').classList.remove('hidden');
+        };
+
+        window.closeReader = () => {
+            document.getElementById('readerModal').classList.add('hidden');
+            activeChapterId = null;
+        };
+
+        window.completeCurrentChapter = async () => {
+            if(!currentUser || activeChapterId === null) return;
+
+            toggleLoader(true);
+            const userRef = doc(db, "users", currentUser.uid);
+            const snap = await getDoc(userRef);
+            let done = snap.data().completedChapters || [];
+
+            if (!done.includes(activeChapterId)) {
+                done.push(activeChapterId);
+                await setDoc(userRef, { completedChapters: done }, { merge: true });
+                alert("অধ্যায় সম্পন্ন হিসেবে মার্ক করা হয়েছে!");
+                renderChapters(done);
+            }
+            toggleLoader(false);
+            closeReader();
+        };
+
+        // --- ADMIN FUNCTIONS ---
+        window.uploadAsset = async (type) => {
+            let file, dbField;
+            if(type === 'hero') {
+                file = document.getElementById('adminHeroImgInput').files[0];
+                dbField = 'heroImage';
+            } else {
+                file = document.getElementById('adminAdInput').files[0];
+                dbField = 'adImage';
+            }
+
+            if(!file) return alert("ফাইল সিলেক্ট করুন");
+
+            toggleLoader(true);
+            try {
+                const storageRef = ref(storage, `assets/${type}_${Date.now()}`);
+                await uploadBytes(storageRef, file);
+                const url = await getDownloadURL(storageRef);
+                
+                await setDoc(doc(db, "siteConfig", "main"), { [dbField]: url }, { merge: true });
+                alert("আপলোড সফল!");
+                loadSiteAssets();
+            } catch (e) { alert(e.message); }
+            toggleLoader(false);
+        };
+
+        window.updateTitle = async () => {
+            const title = document.getElementById('adminTitleInput').value;
+            if(!title) return;
+            await setDoc(doc(db, "siteConfig", "main"), { heroTitle: title }, { merge: true });
+            alert("Title Updated");
+            loadSiteAssets();
+        }
+
+        async function loadSiteAssets() {
+            const snap = await getDoc(doc(db, "siteConfig", "main"));
+            if(snap.exists()) {
+                const d = snap.data();
+                if(d.heroImage) document.getElementById('displayHeroImage').src = d.heroImage;
+                if(d.adImage) document.getElementById('displayAdBanner').src = d.adImage;
+                if(d.heroTitle) document.getElementById('displayHeroTitle').innerText = d.heroTitle;
+            }
+        }
+
+        async function loadAdminData() {
+            const tbody = document.getElementById('adminUserTable');
+            tbody.innerHTML = '';
+            const querySnap = await getDocs(collection(db, "users"));
+            querySnap.forEach(doc => {
+                const u = doc.data();
+                const prog = u.completedChapters ? u.completedChapters.length : 0;
+                tbody.innerHTML += `
+                    <tr class="border-b border-gray-700">
+                        <td class="px-4 py-2">${u.email}</td>
+                        <td class="px-4 py-2 text-neonBlue">${u.role}</td>
+                        <td class="px-4 py-2">${prog}/11</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // --- CERTIFICATE ---
+        window.downloadCert = () => {
+            const name = document.getElementById('userNameDisplay').innerText;
+            document.getElementById('certName').innerText = name;
+            document.getElementById('certDate').innerText = new Date().toLocaleDateString();
+
+            const element = document.getElementById('certificateTemplate');
+            const clone = element.cloneNode(true);
+            clone.style.display = 'block';
+            document.body.appendChild(clone);
+
+            const opt = {
+                margin: 0,
+                filename: `Certificate_10min_${name}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'px', format: [800, 600], orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(clone).save().then(() => document.body.removeChild(clone));
+        };
+
+        // --- UTILS ---
+        window.showSection = (id) => {
+            ['homeSection', 'dashboardSection', 'adminSection'].forEach(sid => document.getElementById(sid).classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        };
+        window.checkAuthAndGo = () => {
+            if(currentUser) showSection('dashboardSection');
+            else openModal('loginModal');
+        };
+        window.openModal = (id) => document.getElementById(id).classList.remove('hidden');
+        window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
+        function toggleLoader(show) {
+            document.getElementById('loader').classList.toggle('hidden', !show);
+        }
+    </script>
+</body>
+</html>
