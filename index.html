@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Minute Income - Premium Course</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Hind Siliguri', 'sans-serif'] },
+                    colors: { 
+                        neonBlue: '#00f3ff', 
+                        neonPurple: '#bc13fe', 
+                        darkBg: '#050505', 
+                        glass: 'rgba(20, 30, 40, 0.8)' 
+                    },
+                    boxShadow: { 'neon': '0 0 10px #00f3ff, 0 0 20px #00f3ff' },
+                    animation: { 'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #050505; color: #e2e8f0; }
+        .glass-panel { background: rgba(17, 25, 40, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .gradient-text { background: linear-gradient(to right, #00f3ff, #bc13fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .chapter-content { max-height: 60vh; overflow-y: auto; line-height: 1.8; font-size: 1.1rem; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
+        
+        /* Loader */
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #00f3ff; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="font-sans antialiased overflow-x-hidden">
+
+    <nav class="fixed w-full z-50 glass-panel border-b border-gray-800 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0 cursor-pointer" onclick="location.reload()">
+                    <span class="text-2xl font-bold gradient-text"><i class="fas fa-bolt mr-2"></i>10 MINUTE</span>
+                </div>
+                
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <button onclick="showSection('homeSection')" class="hover:text-neonBlue px-3 py-2 rounded-md font-medium transition">হোম</button>
+                        <button id="navDashboard" onclick="showSection('dashboardSection')" class="hidden hover:text-neonBlue px-3 py-2 rounded-md font-medium">ড্যাশবোর্ড</button>
+                        <button id="navAdmin" onclick="showSection('adminSection')" class="hidden bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md font-medium shadow-neon">অ্যাডমিন প্যানেল</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <div id="authButtons">
+                        <button onclick="openModal('loginModal')" class="text-gray-300 hover:text-white px-3 py-2">লগিন</button>
+                        <button onclick="openModal('signupModal')" class="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white px-4 py-2 rounded-full shadow-neon transition transform hover:scale-105">সাইন আপ</button>
+                    </div>
+                    <div id="userProfile" class="hidden flex items-center space-x-3">
+                        <div class="text-right mr-2 hidden sm:block">
+                            <p id="userNameDisplay" class="text-neonBlue font-bold text-sm"></p>
+                            <p class="text-xs text-gray-400">Student</p>
+                        </div>
+                        <button onclick="handleLogout()" class="bg-gray-800 p-2 rounded-full hover:bg-red-600 transition" title="Logout">
+                            <i class="fas fa-power-off"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="globalLoader" class="fixed inset-0 z-[100] bg-black bg-opacity-90 flex flex-col items-center justify-center hidden">
+        <div class="loader mb-4"></div>
+        <p class="text-neonBlue animate-pulse">প্রসেসিং হচ্ছে...</p>
+    </div>
+
+    <section id="homeSection" class="pt-24 pb-12 min-h-screen relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+            <div class="absolute top-[-10%] right-[-5%] w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse-slow"></div>
+            <div class="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-cyan-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse-slow"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 flex flex-col-reverse lg:flex-row items-center">
+            <div class="w-full lg:w-1/2 text-center lg:text-left mt-10 lg:mt-0">
+                <div class="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-cyan-400 uppercase bg-cyan-900 bg-opacity-30 rounded-full border border-cyan-500">
+                    বেস্টসেলার কোর্স ২০২৫
+                </div>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4">
+                    <span class="block text-white" id="displayHeroTitle">প্রতিদিন ১০ মিনিট!</span>
+                    <span class="block gradient-text">অনলাইন থেকে সহজ আয়</span>
+                </h1>
+                <p class="mt-4 text-lg text-gray-400 mb-8">
+                    ছাত্র, চাকরিজীবী কিংবা গৃহিণী—সবার জন্য অনলাইন আয়ের কমপ্লিট গাইডলাইন। কোর্সটি সম্পূর্ণ ফ্রি-তে শুরু করুন এবং সার্টিফিকেট অর্জন করুন।
+                </p>
+                <button onclick="checkAuthAndGo()" class="px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg hover:shadow-neon transition transform hover:scale-105">
+                    কোর্স শুরু করুন <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+            
+            <div class="w-full lg:w-1/2 flex justify-center relative">
+                <div class="absolute inset-0 bg-neonBlue blur-3xl opacity-10 rounded-full"></div>
+                <img id="displayHeroImage" src="https://via.placeholder.com/400x600?text=Book+Cover" class="relative rounded-lg shadow-2xl border-4 border-gray-800 w-64 md:w-80 transform hover:rotate-2 transition duration-500 cursor-pointer object-cover">
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 mt-16">
+            <div class="w-full h-28 glass-panel rounded-lg flex items-center justify-center relative overflow-hidden border border-gray-700">
+                <span class="absolute top-1 right-2 text-[10px] text-gray-500">ADVERTISEMENT</span>
+                <img id="displayAdBanner" src="https://via.placeholder.com/1200x200?text=Advertisement+Space" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition duration-300">
+            </div>
+        </div>
+    </section>
+
+    <section id="dashboardSection" class="pt-24 pb-12 hidden min-h-screen">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="glass-panel p-6 rounded-lg mb-8 flex flex-col md:flex-row justify-between items-center border-l-4 border-neonBlue">
+                <div>
+                    <h2 class="text-2xl font-bold text-white mb-1">স্বাগতম, <span id="dashUserName" class="text-neonBlue">User</span>!</h2>
+                    <p class="text-gray-400 text-sm">আপনার চলমান কোর্সের অগ্রগতি নিচে দেখুন।</p>
+                </div>
+                <div class="mt-4 md:mt-0 w-full md:w-1/3 text-right">
+                    <p class="text-gray-300 text-sm mb-1">কোর্স কমপ্লিটেড: <span id="progressPercent" class="font-bold text-white">0%</span></p>
+                    <div class="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+                        <div id="progressBar" class="bg-gradient-to-r from-cyan-500 to-blue-500 h-3 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 space-y-4" id="chapterListContainer">
+                    <div class="text-center text-gray-500 py-10">অধ্যায় লোড হচ্ছে...</div>
+                </div>
+
+                <div class="space-y-6">
+                    <div id="certCard" class="glass-panel p-6 rounded-lg text-center border border-gray-700 opacity-50 pointer-events-none transition-all duration-500">
+                        <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 text-neonPurple">
+                            <i class="fas fa-award text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">কোর্স সার্টিফিকেট</h3>
+                        <p class="text-gray-400 text-sm mb-4">সবগুলো অধ্যায় শেষ করলে সার্টিফিকেট আনলক হবে।</p>
+                        <button onclick="downloadCertificate()" class="w-full py-2 bg-gray-700 text-white rounded font-bold cursor-not-allowed" id="certBtn" disabled>লক করা আছে 🔒</button>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-lg text-center border border-gray-700 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-900 to-transparent opacity-20 group-hover:opacity-40 transition"></div>
+                        <h3 class="text-xl font-bold text-white mb-2 relative z-10">প্রিমিয়াম মেম্বারশিপ</h3>
+                        <p class="text-gray-400 text-sm mb-4 relative z-10">লাইভ ক্লাস এবং মেন্টরশিপ পেতে আপগ্রেড করুন।</p>
+                        <button class="w-full py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded font-bold shadow-neon relative z-10 hover:scale-105 transition">
+                            আপগ্রেড করুন ($10)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="adminSection" class="pt-24 pb-12 hidden min-h-screen bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-4 mb-8">
+                <h2 class="text-3xl font-bold text-red-500"><i class="fas fa-user-shield mr-2"></i>অ্যাডমিন প্যানেল</h2>
+                <div class="text-gray-400 text-sm">Logged in as: <span class="text-white">eco452@gmail.com</span></div>
+            </div>
+
+            <div class="flex space-x-2 mb-6 overflow-x-auto">
+                <button onclick="switchAdminTab('general')" class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 focus:bg-red-600 transition">পেজ সেটআপ</button>
+                <button onclick="switchAdminTab('chapters')" class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 focus:bg-red-600 transition">অধ্যায় ও কন্টেন্ট</button>
+                <button onclick="switchAdminTab('users')" class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 focus:bg-red-600 transition">ইউজার মনিটরিং</button>
+            </div>
+
+            <div id="adminTab-general" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-panel p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-white mb-4">🖼️ ইমেজ আপলোড</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-400 text-sm mb-2">বইয়ের কভার ফটো (Home)</label>
+                        <div class="flex gap-2">
+                            <input type="file" id="adminHeroImg" class="block w-full text-sm text-gray-400 file:bg-gray-700 file:text-white file:border-0 file:py-2 file:px-4 file:rounded">
+                            <button onclick="uploadAsset('heroImage', 'adminHeroImg')" class="bg-green-600 text-white px-3 rounded hover:bg-green-700">Upload</button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-400 text-sm mb-2">বিজ্ঞাপন ব্যানার (Home Ad)</label>
+                        <div class="flex gap-2">
+                            <input type="file" id="adminAdImg" class="block w-full text-sm text-gray-400 file:bg-gray-700 file:text-white file:border-0 file:py-2 file:px-4 file:rounded">
+                            <button onclick="uploadAsset('adImage', 'adminAdImg')" class="bg-green-600 text-white px-3 rounded hover:bg-green-700">Upload</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-white mb-4">📢 টেক্সট আপডেট</h3>
+                    <label class="block text-gray-400 text-sm mb-2">হিরো টাইটেল</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="adminTitleInput" placeholder="Ex: প্রতিদিন ১০ মিনিট" class="w-full bg-gray-800 text-white px-3 py-2 rounded border border-gray-600">
+                        <button onclick="updateSiteConfig({heroTitle: document.getElementById('adminTitleInput').value})" class="bg-blue-600 text-white px-3 rounded hover:bg-blue-700">Update</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="adminTab-chapters" class="hidden">
+                <div class="glass-panel p-6 rounded-lg mb-6">
+                    <h3 class="text-xl font-bold text-white mb-4">নতুন অধ্যায় যোগ করুন</h3>
+                    <input type="text" id="newChapTitle" placeholder="অধ্যায়ের নাম" class="w-full bg-gray-800 text-white px-3 py-2 rounded mb-2 border border-gray-600">
+                    <textarea id="newChapContent" rows="4" placeholder="অধ্যায়ের বিস্তারিত লেখা (HTML Supported)" class="w-full bg-gray-800 text-white px-3 py-2 rounded mb-2 border border-gray-600"></textarea>
+                    <button onclick="addNewChapter()" class="bg-neonBlue text-black font-bold px-6 py-2 rounded hover:bg-cyan-400">যোগ করুন</button>
+                </div>
+                
+                <div class="glass-panel p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-white mb-4">অধ্যায় তালিকা (Edit/Delete)</h3>
+                    <div id="adminChapterList" class="space-y-2">
+                        </div>
+                </div>
+            </div>
+
+            <div id="adminTab-users" class="hidden">
+                <div class="glass-panel p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-white mb-4">নিবন্ধিত ব্যবহারকারী</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-400">
+                            <thead class="bg-gray-800 text-xs uppercase">
+                                <tr>
+                                    <th class="px-4 py-2">Name</th>
+                                    <th class="px-4 py-2">Email</th>
+                                    <th class="px-4 py-2">Phone</th>
+                                    <th class="px-4 py-2">Progress</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUserTable">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="readerModal" class="fixed inset-0 z-[80] hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20">
+            <div class="fixed inset-0 bg-black bg-opacity-95 transition-opacity" onclick="closeReader()"></div>
+            <div class="relative glass-panel border border-neonPurple rounded-lg max-w-4xl w-full p-6 sm:p-10 transform transition-all">
+                <div class="flex justify-between items-start mb-6 border-b border-gray-700 pb-4">
+                    <h3 id="readerTitle" class="text-2xl font-bold text-neonBlue">Chapter Title</h3>
+                    <button onclick="closeReader()" class="text-gray-400 hover:text-red-500 text-3xl">&times;</button>
+                </div>
+                <div id="readerContent" class="chapter-content text-justify mb-8 text-gray-300 pr-2"></div>
+                <div class="flex justify-end pt-4 border-t border-gray-700">
+                    <button onclick="markChapterComplete()" class="px-6 py-3 bg-green-600 text-white rounded font-bold hover:bg-green-700 shadow-neon flex items-center transition transform hover:scale-105">
+                        <i class="fas fa-check mr-2"></i> পড়া শেষ (Next Chapter)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="fixed inset-0 z-[90] hidden">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-black bg-opacity-80" onclick="closeModal('loginModal')"></div>
+            <div class="relative glass-panel p-8 rounded-lg max-w-sm w-full border border-gray-700 shadow-2xl">
+                <h2 class="text-2xl font-bold text-white mb-6 text-center">লগিন</h2>
+                <input type="email" id="loginEmail" placeholder="Email" class="w-full bg-gray-800 text-white p-3 rounded mb-3 border border-gray-600 focus:border-neonBlue outline-none">
+                <input type="password" id="loginPass" placeholder="Password" class="w-full bg-gray-800 text-white p-3 rounded mb-6 border border-gray-600 focus:border-neonBlue outline-none">
+                <button onclick="loginUser()" class="w-full bg-neonBlue text-black font-bold py-3 rounded hover:bg-cyan-400 transition">প্রবেশ করুন</button>
+                <p class="text-center text-gray-500 mt-4 text-sm cursor-pointer hover:text-white" onclick="closeModal('loginModal'); openModal('signupModal')">অ্যাকাউন্ট নেই? সাইন আপ</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="signupModal" class="fixed inset-0 z-[90] hidden">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-black bg-opacity-80" onclick="closeModal('signupModal')"></div>
+            <div class="relative glass-panel p-8 rounded-lg max-w-sm w-full border border-gray-700 shadow-2xl">
+                <h2 class="text-2xl font-bold text-white mb-6 text-center">রেজিস্ট্রেশন</h2>
+                <input type="text" id="signupName" placeholder="আপনার নাম" class="w-full bg-gray-800 text-white p-3 rounded mb-3 border border-gray-600">
+                <input type="text" id="signupPhone" placeholder="মোবাইল নম্বর" class="w-full bg-gray-800 text-white p-3 rounded mb-3 border border-gray-600">
+                <input type="email" id="signupEmail" placeholder="ইমেইল" class="w-full bg-gray-800 text-white p-3 rounded mb-3 border border-gray-600">
+                <input type="password" id="signupPass" placeholder="পাসওয়ার্ড" class="w-full bg-gray-800 text-white p-3 rounded mb-6 border border-gray-600">
+                <button onclick="registerUser()" class="w-full bg-neonPurple text-white font-bold py-3 rounded hover:bg-purple-600 transition">সাইন আপ</button>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:none;">
+        <div id="certificateTemplate" style="width:800px; height:600px; padding:40px; text-align:center; background:#fff; color:#000; position:relative; font-family: 'serif';">
+            <div style="border:5px double #bc13fe; height:100%; padding:30px; display:flex; flex-direction:column; justify-content:center; align-items:center; background: #fafafa;">
+                <div style="font-size: 24px; font-weight: bold; color: #000; margin-bottom: 20px;">10 MINUTE ACADEMY</div>
+                
+                <h1 style="font-size:48px; color:#bc13fe; margin:0; text-transform: uppercase; letter-spacing: 2px;">Certificate of Completion</h1>
+                
+                <p style="font-size:18px; margin-top:30px; color: #555;">This is to certify that</p>
+                
+                <h2 id="certName" style="font-size:42px; font-weight:bold; border-bottom:2px solid #000; margin:10px 0; padding:0 40px; color: #222;">Student Name</h2>
+                
+                <p style="font-size:18px; margin-top:20px; color: #555;">Has successfully completed the course</p>
+                
+                <h3 style="font-size:32px; color:#00f3ff; margin:10px 0; text-shadow: 1px 1px 0 #000; text-transform: uppercase;">"Online Income Guideline"</h3>
+                
+                <div style="width:100%; margin-top:60px; display:flex; justify-content:space-between; padding:0 60px;">
+                    <div style="text-align:center;">
+                        <div style="font-family: 'Cursive', sans-serif; font-size: 20px; color: #bc13fe;">Manjurul Haque</div>
+                        <p style="border-top:1px solid #999; padding-top:5px; width:200px; font-size: 14px;">Instructor & Admin</p>
+                    </div>
+                    <div style="text-align:center;">
+                        <div id="certDate" style="font-size: 18px; font-weight: bold; color: #000;">Date</div>
+                        <p style="border-top:1px solid #999; padding-top:5px; width:200px; font-size: 14px;">Issue Date</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, getDocs, addDoc, deleteDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCWW8qlaqmJ5HBDYL7p5FGrV5hT7kVWo-w",
+            authDomain: "minute-income.firebaseapp.com",
+            projectId: "minute-income",
+            storageBucket: "minute-income.firebasestorage.app",
+            messagingSenderId: "401216110424",
+            appId: "1:401216110424:web:9dd0fa943371797b1daf2d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // GLOBAL STATE
+        let currentUser = null;
+        let userData = null;
+        let chapters = [];
+        let currentReadingId = null;
+        const ADMIN_EMAIL = "eco452@gmail.com";
+
+        // --- AUTH ---
+        window.registerUser = async () => {
+            const name = document.getElementById('signupName').value;
+            const phone = document.getElementById('signupPhone').value;
+            const email = document.getElementById('signupEmail').value;
+            const pass = document.getElementById('signupPass').value;
+
+            if(!name || !email || !pass) return alert("সব তথ্য পূরণ করুন!");
+            toggleLoader(true);
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                // Create user doc
+                await setDoc(doc(db, "users", cred.user.uid), {
+                    name, phone, email,
+                    role: 'student',
+                    completedChapters: [],
+                    joinedAt: new Date().toISOString()
+                });
+                alert("রেজিস্ট্রেশন সফল! স্বাগতম।");
+                closeModal('signupModal');
+            } catch (err) { alert(err.message); }
+            toggleLoader(false);
+        };
+
+        window.loginUser = async () => {
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPass').value;
+            toggleLoader(true);
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                closeModal('loginModal');
+            } catch (err) { alert("লগিন ব্যর্থ: " + err.message); }
+            toggleLoader(false);
+        };
+
+        window.handleLogout = () => signOut(auth).then(() => location.reload());
+
+        // --- STATE LISTENER ---
+        onAuthStateChanged(auth, async (user) => {
+            toggleLoader(true);
+            if (user) {
+                currentUser = user;
+                // Get User Data
+                const snap = await getDoc(doc(db, "users", user.uid));
+                if (snap.exists()) {
+                    userData = snap.data();
+                    updateUI(true);
+                }
+            } else {
+                updateUI(false);
+            }
+            await loadSiteConfig(); // Load images
+            toggleLoader(false);
+        });
+
+        // --- UI UPDATES ---
+        function updateUI(isLoggedIn) {
+            if (isLoggedIn) {
+                document.getElementById('authButtons').classList.add('hidden');
+                document.getElementById('userProfile').classList.remove('hidden');
+                document.getElementById('navDashboard').classList.remove('hidden');
+                document.getElementById('userNameDisplay').innerText = userData.name;
+                document.getElementById('dashUserName').innerText = userData.name;
+
+                // Admin Check
+                if (currentUser.email === ADMIN_EMAIL) {
+                    document.getElementById('navAdmin').classList.remove('hidden');
+                    loadAdminData(); // Pre-load admin data
+                }
+
+                loadUserDashboard();
+            } else {
+                document.getElementById('authButtons').classList.remove('hidden');
+                document.getElementById('userProfile').classList.add('hidden');
+                document.getElementById('navDashboard').classList.add('hidden');
+                document.getElementById('navAdmin').classList.add('hidden');
+            }
+        }
+
+        // --- CONTENT & DASHBOARD ---
+        async function loadUserDashboard() {
+            // Fetch Chapters
+            const q = await getDocs(collection(db, "chapters"));
+            chapters = [];
+            q.forEach(doc => chapters.push({ id: doc.id, ...doc.data() }));
+            
+            // Sort chapters by order (assuming 'order' field, or fallback to title)
+            chapters.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+            renderChapterList();
+        }
+
+        function renderChapterList() {
+            const container = document.getElementById('chapterListContainer');
+            container.innerHTML = '';
+            
+            const completed = userData.completedChapters || [];
+            const progress = Math.round((completed.length / chapters.length) * 100) || 0;
+            
+            // Update Progress Bar
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressPercent').innerText = `${progress}%`;
+
+            // Certificate Logic
+            const certCard = document.getElementById('certCard');
+            const certBtn = document.getElementById('certBtn');
+            if (progress === 100 && chapters.length > 0) {
+                certCard.classList.remove('opacity-50', 'pointer-events-none');
+                certCard.classList.add('border-neonPurple', 'shadow-neon');
+                certBtn.disabled = false;
+                certBtn.innerHTML = "ডাউনলোড করুন <i class='fas fa-download ml-1'></i>";
+                certBtn.classList.remove('bg-gray-700', 'cursor-not-allowed');
+                certBtn.classList.add('bg-neonPurple', 'hover:bg-purple-600');
+            }
+
+            chapters.forEach((chap, index) => {
+                const isCompleted = completed.includes(chap.id);
+                // Lock Logic: If previous not completed, lock current (unless it's first)
+                let isLocked = false;
+                if (index > 0) {
+                    const prevChapId = chapters[index - 1].id;
+                    if (!completed.includes(prevChapId)) isLocked = true;
+                }
+
+                let btnClass = isLocked 
+                    ? "bg-gray-700 text-gray-500 cursor-not-allowed" 
+                    : (isCompleted ? "bg-green-600 text-white" : "bg-neonBlue text-black hover:bg-cyan-400");
+                
+                let btnText = isLocked ? `<i class="fas fa-lock"></i> লক` : (isCompleted ? `<i class="fas fa-check"></i> সম্পন্ন` : `পড়ুন <i class="fas fa-book-open"></i>`);
+                let clickAction = isLocked ? "" : `openReader('${chap.id}')`;
+
+                container.innerHTML += `
+                    <div class="glass-panel p-4 rounded-lg flex justify-between items-center transition hover:bg-white hover:bg-opacity-5">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center mr-4 ${isCompleted ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-400'}">
+                                ${index + 1}
+                            </div>
+                            <div>
+                                <h3 class="text-white font-semibold">${chap.title}</h3>
+                                <p class="text-xs text-gray-400">সময়: ১০ মিনিট</p>
+                            </div>
+                        </div>
+                        <button onclick="${clickAction}" class="px-4 py-2 rounded text-sm font-bold transition ${btnClass}">
+                            ${btnText}
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        window.openReader = (id) => {
+            const chap = chapters.find(c => c.id === id);
+            currentReadingId = id;
+            document.getElementById('readerTitle').innerText = chap.title;
+            document.getElementById('readerContent').innerHTML = chap.content; // Allows HTML content
+            openModal('readerModal');
+        };
+
+        window.markChapterComplete = async () => {
+            if (!currentReadingId) return;
+            
+            toggleLoader(true);
+            try {
+                // Update Firestore
+                await updateDoc(doc(db, "users", currentUser.uid), {
+                    completedChapters: arrayUnion(currentReadingId)
+                });
+                
+                // Update Local State
+                if (!userData.completedChapters.includes(currentReadingId)) {
+                    userData.completedChapters.push(currentReadingId);
+                }
+                
+                renderChapterList();
+                closeModal('readerModal');
+                alert("অভিনন্দন! অধ্যায় শেষ হয়েছে।");
+            } catch (err) { console.error(err); }
+            toggleLoader(false);
+        };
+
+        // --- CERTIFICATE ---
+        window.downloadCertificate = () => {
+            const name = userData.name;
+            document.getElementById('certName').innerText = name;
+            document.getElementById('certDate').innerText = new Date().toLocaleDateString();
+
+            const element = document.getElementById('certificateTemplate');
+            const clone = element.cloneNode(true);
+            clone.style.display = 'block';
+            document.body.appendChild(clone);
+
+            const opt = {
+                margin: 0,
+                filename: `Certificate_${name.replace(/\s/g, '_')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'px', format: [800, 600], orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(clone).save().then(() => document.body.removeChild(clone));
+        };
+
+        // --- ADMIN FUNCTIONS ---
+        window.switchAdminTab = (tab) => {
+            ['general', 'chapters', 'users'].forEach(t => document.getElementById(`adminTab-${t}`).classList.add('hidden'));
+            document.getElementById(`adminTab-${tab}`).classList.remove('hidden');
+        };
+
+        window.uploadAsset = async (field, inputId) => {
+            const file = document.getElementById(inputId).files[0];
+            if (!file) return alert("ফাইল সিলেক্ট করুন");
+            toggleLoader(true);
+            try {
+                const storageRef = ref(storage, `assets/${field}_${Date.now()}`);
+                await uploadBytes(storageRef, file);
+                const url = await getDownloadURL(storageRef);
+                await updateSiteConfig({ [field]: url });
+                alert("আপলোড সফল!");
+                loadSiteConfig();
+            } catch (err) { alert(err.message); }
+            toggleLoader(false);
+        };
+
+        window.updateSiteConfig = async (data) => {
+            await setDoc(doc(db, "config", "main"), data, { merge: true });
+        };
+
+        async function loadSiteConfig() {
+            const snap = await getDoc(doc(db, "config", "main"));
+            if (snap.exists()) {
+                const data = snap.data();
+                if (data.heroImage) document.getElementById('displayHeroImage').src = data.heroImage;
+                if (data.adImage) document.getElementById('displayAdBanner').src = data.adImage;
+                if (data.heroTitle) document.getElementById('displayHeroTitle').innerText = data.heroTitle;
+            }
+        }
+
+        window.addNewChapter = async () => {
+            const title = document.getElementById('newChapTitle').value;
+            const content = document.getElementById('newChapContent').value;
+            if(!title || !content) return;
+            
+            toggleLoader(true);
+            try {
+                // Determine order
+                const order = chapters.length + 1;
+                await addDoc(collection(db, "chapters"), { title, content, order });
+                alert("অধ্যায় যোগ হয়েছে!");
+                loadAdminChapters(); // Refresh List
+                document.getElementById('newChapTitle').value = "";
+                document.getElementById('newChapContent').value = "";
+            } catch(e){ alert(e.message); }
+            toggleLoader(false);
+        };
+
+        async function loadAdminChapters() {
+            const list = document.getElementById('adminChapterList');
+            list.innerHTML = '';
+            // Re-fetch to be safe
+            const q = await getDocs(collection(db, "chapters"));
+            let chaps = [];
+            q.forEach(d => chaps.push({id: d.id, ...d.data()}));
+            chaps.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+            chaps.forEach(c => {
+                list.innerHTML += `
+                    <div class="flex justify-between bg-gray-800 p-2 rounded items-center">
+                        <span class="text-white">${c.title}</span>
+                        <button onclick="deleteChapter('${c.id}')" class="text-red-500 hover:text-red-400"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            });
+        }
+
+        window.deleteChapter = async (id) => {
+            if(!confirm("Are you sure?")) return;
+            await deleteDoc(doc(db, "chapters", id));
+            loadAdminChapters();
+        };
+
+        async function loadAdminData() {
+            // Load Chapters List
+            loadAdminChapters();
+
+            // Load Users
+            const table = document.getElementById('adminUserTable');
+            table.innerHTML = '';
+            const q = await getDocs(collection(db, "users"));
+            q.forEach(d => {
+                const u = d.data();
+                const prog = u.completedChapters ? u.completedChapters.length : 0;
+                table.innerHTML += `
+                    <tr class="border-b border-gray-700 hover:bg-gray-800">
+                        <td class="px-4 py-2 text-white">${u.name}</td>
+                        <td class="px-4 py-2">${u.email}</td>
+                        <td class="px-4 py-2">${u.phone || '-'}</td>
+                        <td class="px-4 py-2 text-neonBlue">${prog} Chapters</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // --- UTILS ---
+        window.showSection = (id) => {
+            ['homeSection', 'dashboardSection', 'adminSection'].forEach(s => document.getElementById(s).classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        };
+        window.checkAuthAndGo = () => { currentUser ? showSection('dashboardSection') : openModal('loginModal'); };
+        window.openModal = (id) => document.getElementById(id).classList.remove('hidden');
+        window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
+        function toggleLoader(show) {
+            const loader = document.getElementById('globalLoader');
+            if(show) loader.classList.remove('hidden'); else loader.classList.add('hidden');
+        }
+
+        // --- MAKE FUNCTIONS GLOBAL ---
+        window.openReader = openReader;
+        window.uploadAsset = uploadAsset;
+        window.updateSiteConfig = updateSiteConfig;
+        window.addNewChapter = addNewChapter;
+    </script>
+</body>
+</html>
